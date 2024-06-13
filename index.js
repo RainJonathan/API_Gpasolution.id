@@ -50,3 +50,9 @@ whatsapp.onConnecting((session) => {
 });
 
 whatsapp.loadSessionsFromStorage();
+
+if (){
+  inset IntersectionObserver
+
+  fetch method= POST (api.)
+}
