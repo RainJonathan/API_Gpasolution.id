@@ -12,7 +12,7 @@ const whatsapp = require("wa-multi-session");
 config();
 
 var app = express();
-// app.use(morgan("dev"));
+app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
