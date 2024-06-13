@@ -131,4 +131,4 @@ dist
 
 # Server config
 .htaccess
-wa_credentials
+wa_credentials/

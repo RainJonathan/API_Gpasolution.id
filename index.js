@@ -25,7 +25,11 @@ app.use("/p/*", (req, res) => res.status(404).send("Media Not Found"));
 app.use(MainRouter);
 
 app.use(errorHandlerMiddleware);
-
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB1_DATABASE:', process.env.DB1_DATABASE);
+console.log('DB2_DATABASE:', process.env.DB2_DATABASE);
 const PORT = process.env.PORT || "5000";
 app.set("port", PORT);
 var server = http.createServer(app);
