@@ -5,7 +5,7 @@ const {
 
 const AssetAlertRouter = Router();
 
-AssetAlertRouter.all("/asset-alert", sendMessage);
+AssetAlertRouter.post("/asset-alert", sendMessage);
 
 
 module.exports = AssetAlertRouter;
