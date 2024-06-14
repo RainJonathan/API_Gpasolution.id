@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi API Handling (Headless WA Multi Session)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #333;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: #fff;
+      margin: 5px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    pre {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Multi API Handling (Headless WA Multi Session Included)</h1>
+  <p>Easy Setup Headless multi session Whatsapp Gateway with NodeJS</p>
+  <ul>
+    <li>Support multi device</li>
+    <li>Support multi session / multi phone number</li>
+    <li>Anti delay message</li>
+    <li>Bulk Message</li>
+  </ul>
+
+  <p>Based on <a href="https://github.com/mimamch/wa-multi-session">wa-multi-session</a></p>
+
+  <h2>Environment Variables</h2>
+  <p>To run this project, you will need to add the following environment variables to your .env file</p>
+  <pre>
+<code>
+// .env
+
+PORT=5001 // which port to running on your machine
+KEY=somthin # For Securing Some Data
+</code>
+  </pre>
+
+  <h2>Install and Running</h2>
+  <p>Clone the project</p>
+  <pre><code>git clone https://github.com/mimamch/wa_gateway.git</code></pre>
+  <p>Go to the project directory</p>
+  <pre><code>cd wa_gateway</code></pre>
+  <p>Install dependencies</p>
+  <pre><code>npm install</code></pre>
+  <p>Start the server</p>
+  <pre><code>npm run start</code></pre>
+  <p>Open On Browser & Start New Session</p>
+  <pre><code>http://localhost:5000/start-session?session=mysession&scan=true</code></pre>
+
+  <h2>API Reference</h2>
+
+  <h3>Add new session</h3>
+  <pre><code>GET /start-session?session=NEW_SESSION_NAME&scan=true</code></pre>
+  <table>
+    <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>session</code></td>
+        <td>string</td>
+        <td><strong>Required</strong>. Create Your Session Name</td>
+      </tr>
+      <tr>
+        <td><code>scan</code></td>
+        <td>boolean</td>
+        <td>Print QR at Browser</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Send Text Message</h3>
+  <pre><code>POST /send-message</code></pre>
+  <table>
+    <thead>
+      <tr>
+        <th>Body</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>session</code></td>
+        <td>string</td>
+        <td><strong>Required</strong>. Session Name You Have Created</td>
+      </tr>
+      <tr>
+        <td><code>to</code></td>
+        <td>string</td>
+        <td><strong>Required</strong>. Receiver Phone Number with Country Code (e.g: 62812345678)</td>
+      </tr>
+      <tr>
+        <td><code>text</code></td>
+        <td>string</td>
+        <td><strong>Required</strong>. Text Message</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Send Bulk Message</h3>
+  <pre><code>POST /send-bulk-message</code></pre>
+  <table>
+    <thead>
+      <tr>
+        <th>Body</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>session</code></td>
+        <td>string</td>
+        <td><strong>Required</strong>. Session Name You Have Created</td>
+      </tr>
+      <tr>
+        <td><code>data</code></td>
+        <td>array</td>
+        <td><strong>Required</strong>. Array Of Object Message Data</td>
+      </tr>
+      <tr>
+        <td><code>delay</code></td>
+        <td>number</td>
+        <td>Delay Per-message in Miliseconds, Default to 5000ms</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Delete session</h3>
+  <pre><code>GET /delete-session?session=SESSION_NAME</code></pre>
+  <table>
+    <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>session</code></td>
+        <td>string</td>
+        <td><strong>Required</strong>. Create Your Session Name</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Get All Session ID</h3>
+  <pre><code>GET /sessions?key=mysupersecretkey</code></pre>
+  <table>
+    <thead>
+      <tr>
+        <th>Parameter</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>key</code></td>
+        <td>string</td>
+        <td><strong>Required</strong>. Key on ".env" file</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Changelog</h2>
+  <h3>V3.2.0</h3>
+  <ul>
+    <li>Add Get All Session ID</li>
+    <li>Add Key for secret data</li>
+    <li>Update README.md</li>
+  </ul>
+
+  <h2>Upgrading</h2>
+  <pre><code>npm install wa-multi-session@latest</code></pre>
+
+  <h2>Documentation</h2>
+  <p>For detailed documentation, including guides and API references, please visit the <a
+      href="https://github.com/mimamch/wa-gateway">official documentation</a>.</p>
+
+  <h2>Contributing</h2>
+  <p>Contributions are welcome! Please follow the guidelines outlined in the <a
+      href="https://github.com/mimamch/wa-gateway/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> file.</p>
+
+  <h2>License</h2>
+  <p>This library is licensed under the <a href="https://github.com/mimamch/wa-gateway/blob/main/LICENSE">MIT
+      License</a>.</p>
+</body>
+
+</html>

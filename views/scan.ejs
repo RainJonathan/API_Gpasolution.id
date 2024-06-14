@@ -1,24 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Scan QR</title>
-        <style>
-            body {
-                padding: 5rem;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="qrcode"></div>
-        <script type="text/javascript">
-            console.log('<%= qr %>')
-            let qr = '<%= qr %>'
-            let image = new Image()
-            image.src = qr
-            document.body.appendChild(image)
-        </script>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPA Solution WA Gateway - Scan QR</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+            background-color: #f0f0f0; /* Optional: background color */
+            font-family: Arial, sans-serif; /* Default font */
+            text-align: center; /* Center-align text */
+        }
+        h1 {
+            margin: 0 0 1rem 0; /* Margin for spacing */
+            font-size: 2rem; /* Font size for title */
+            color: #333; /* Optional: title color */
+        }
+        p {
+            margin: 0 0 2rem 0; /* Margin for spacing */
+            font-size: 1.2rem; /* Font size for text */
+            color: #666; /* Optional: text color */
+        }
+        #qrcode img {
+            max-width: 100%; /* Ensure image fits within the screen */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body>
+    <h1>GPA Solution WA Gateway</h1>
+    <p>Scan the QR code below to sign in. Please be aware of the general security warnings.</p>
+    <div id="qrcode"></div>
+    <script type="text/javascript">
+        console.log('<%= qr %>');
+        let qr = '<%= qr %>';
+        let image = new Image();
+        image.src = qr;
+        document.getElementById('qrcode').appendChild(image);
+    </script>
+    <p>Session: <%= session %></p>
+    <section class="bottom-copy">
+        <div>&copy; Rein Jonathan.</div>
+    </section>
+</body>
 </html>

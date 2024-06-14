@@ -9,6 +9,7 @@ const {
 exports.createSession = async (req, res, next) => {
   try {
     const scan = req.query.scan;
+    const session = req.query.session || 'default';
     const sessionName =
       req.body.session || req.query.session || req.headers.session;
     if (!sessionName) {
@@ -18,7 +19,7 @@ exports.createSession = async (req, res, next) => {
       if (res && !res.headersSent) {
         const qr = await toDataURL(data.qr);
         if (scan && data.sessionId == sessionName) {
-          res.render("scan", { qr: qr });
+          res.render("scan", { qr: qr, session:session});
         } else {
           res.status(200).json(
             responseSuccessWithData({
