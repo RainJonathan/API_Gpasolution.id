@@ -1,70 +1,72 @@
 const whatsapp = require("wa-multi-session");
 const ValidationError = require("../../../utils/error");
-const {AssetsPool} = require("../../../db/config");
+const { AssetsPool } = require("../../../db/config");
 
-exports.sendMessage = async (req, res, next) => {
+exports.queryMessage = async (req, res, next) => {
     try {
-        // Get the session ID from the request
         const sessionId = req.body.session || req.query.session || req.headers.session;
+        const delay = req.body.delay;
         if (!sessionId) throw new ValidationError("Session Not Found");
 
-        // Get a connection from the pool
         const connection = await AssetsPool.getConnection();
 
         try {
-            // Fetch data from the database
             const [rows] = await connection.query('SELECT * FROM outbox WHERE send_status = "N"');
 
             if (rows.length === 0) {
-                connection.release(); // Release the connection back to the pool
-                res.status(200).json({ message: 'No data found to send messages.' });
-                return;
+                connection.release();
+                return res.status(200).json({ message: 'No data found to send messages.' });
             }
 
-            // Send WhatsApp messages and collect results
-            const results = await Promise.all(rows.map(async (row) => {
+            res.status(200).json({ status: true, message: "Bulk Message is Processing" });
+
+            const results = [];
+
+            for (const row of rows) {
                 try {
                     const send = await whatsapp.sendTextMessage({
                         sessionId,
                         to: row.wa_no,
-                        isGroup: false, // Assuming individual messages, adjust if needed
+                        isGroup: false,
                         text: row.wa_text,
                     });
 
-                    // Update the sent_status and created_by fields in the database
                     await connection.query(
                         'UPDATE outbox SET send_status = ?, created_by = ? WHERE id = ?',
                         ['Y', 'asset', row.id]
                     );
 
-                    return {
+                    results.push({
                         id: row.id,
                         status: send?.status,
                         message: send?.message?.extendedTextMessage?.text || "Not Text",
                         remoteJid: send?.key?.remoteJid,
                         error: null,
-                    };
+                    });
+
+                    await whatsapp.createDelay(delay ?? 1000);
+
                 } catch (sendError) {
-                    return {
+                    results.push({
                         id: row.id,
                         status: 'failed',
                         message: null,
                         remoteJid: null,
                         error: sendError.message,
-                    };
+                    });
+
+                    console.error(`Failed to send message to ${row.wa_no}: ${sendError.message}`);
                 }
-            }));
+            }
 
-            // Release the connection back to the pool
             connection.release();
-
-            // Send the results as a JSON response
-            res.status(200).json(results);
+            // res.status(200).json({ status: true, data: { results } }); // Sending response once
 
         } catch (queryError) {
-            connection.release(); // Release the connection back to the pool if a query error occurs
+            connection.release();
             next(queryError);
         }
+
     } catch (error) {
         next(error);
     }
