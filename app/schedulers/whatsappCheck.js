@@ -3,17 +3,18 @@ const axios = require('axios');
 
 function start() {
     // Schedule the task to run every hour
-    cron.schedule('0 * * * * *', () => {
+    cron.schedule('*/5 * * * * *', () => {
         console.log('Calling API every 1 hour');
         callApi();
     });
 }
-
+//'*/10 * * * * *'
+//'0 * * * * *'
 
 // Function to call the API and log data
 async function callApi() {
     try {
-        const response = await axios.post('https://api.gpasolution.id/whatsapp/asset-alert', {
+        const response = await axios.post('http://localhost:5001/whatsapp/asset-alert', {
             session: 'mysession'
         });
         console.log('API response:', response.data);
@@ -22,4 +23,5 @@ async function callApi() {
     }
 }
 
+//'https://api.gpasolution.id/whatsapp/asset-alert'
 module.exports = { start };
